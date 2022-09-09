@@ -2,45 +2,43 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class FacultyService {
 
-    private final HashMap<Long, Faculty> faculties = new HashMap<>();
-    private long lastId = 0;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(++lastId);
-        faculties.put(lastId, faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty (Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).get();
     }
 
     public Faculty editFaculty (Faculty faculty) {
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty deleteFaculty (Long id) {
-        return faculties.remove(id);
+    public void deleteFaculty (Long id) {
+        facultyRepository.deleteById(id);
     }
 
-    public ArrayList<Faculty> getFacultyByColor (String color) {
-        ArrayList<Faculty> newList = new ArrayList<>();
-        Faculty[] values = faculties.values().toArray(new Faculty[faculties.size()]);
-        for (int i = 0; i < faculties.values().size(); i++) {
-            if (values[i].getColor().equals(color)) {
-                newList.add(values[i]);
-            }
-        }
-        return newList;
-    }
+//    public ArrayList<Faculty> getFacultyByColor (String color) {
+//        ArrayList<Faculty> newList = new ArrayList<>();
+//        Faculty[] values = faculties.values().toArray(new Faculty[faculties.size()]);
+//        for (int i = 0; i < faculties.values().size(); i++) {
+//            if (values[i].getColor().equals(color)) {
+//                newList.add(values[i]);
+//            }
+//        }
+//        return newList;
+//    }
 }
