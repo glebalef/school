@@ -35,8 +35,8 @@ public class StudentController {
         studentService.deleteStudent(id);
     }
 
-  //  @GetMapping("age/{age}")
-    //public Collection<Student> getByAge (@PathVariable int age) {
-      //  return studentService.getStudentByAge(age);
-   // }
+    @GetMapping("age/{age}")
+    public Collection<Student> getByAge (@PathVariable int age) {
+        return studentService.getStudentByAge(age);
+    }
 }

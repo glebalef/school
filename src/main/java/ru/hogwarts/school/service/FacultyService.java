@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FacultyService {
@@ -31,14 +32,7 @@ public class FacultyService {
         facultyRepository.deleteById(id);
     }
 
-//    public ArrayList<Faculty> getFacultyByColor (String color) {
-//        ArrayList<Faculty> newList = new ArrayList<>();
-//        Faculty[] values = faculties.values().toArray(new Faculty[faculties.size()]);
-//        for (int i = 0; i < faculties.values().size(); i++) {
-//            if (values[i].getColor().equals(color)) {
-//                newList.add(values[i]);
-//            }
-//        }
-//        return newList;
-//    }
+    public List<Faculty> getFacultyByColor (String color) {
+        return facultyRepository.findByColor(color);
+    }
 }

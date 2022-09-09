@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -30,13 +31,7 @@ public class StudentService {
     public void deleteStudent (Long id) {
        studentRepository.deleteById(id);
     }
-//    public ArrayList<Student> getStudentByAge (int age) {
-//        ArrayList<StudentRepository> newList = new ArrayList<>();
-//        for (int i = 0; i < studentRepository..values().size(); i++) {
-//            if (values[i].getAge() == age) {
-//                newList.add(values[i]);
-//            }
-//        }
-//        return newList;
-  //  }
+    public List<Student> getStudentByAge (int age) {
+        return studentRepository.findByAge(age);
+    }
 }
