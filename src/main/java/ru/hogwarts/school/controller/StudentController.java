@@ -36,18 +36,18 @@ public class StudentController {
         studentService.deleteStudent(id);
     }
 
-    @GetMapping("age/{age}")
+    @GetMapping("/{age}/age")
     public Collection<Student> getByAge (@PathVariable int age) {
         return studentService.getStudentByAge(age);
     }
 
-    @GetMapping("age/{minAge}/  {maxAge}")
-    public Collection<Student> getByAgeBetween (@PathVariable int minAge, @PathVariable int maxAge) {
+    @GetMapping("/age")
+    public Collection<Student> getByAgeBetween (@RequestParam int minAge, @RequestParam int maxAge) {
         return studentService.getStudentByAgeBetween(minAge, maxAge);
     }
 
     @GetMapping ("/faculty/{id}")
-    public String getFacultyByStudent (@PathVariable Long id) {
+    public Faculty getFacultyByStudent (@PathVariable Long id) {
         return studentService.getFacultyByStudent(id);
     }
 }

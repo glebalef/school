@@ -7,6 +7,7 @@ import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StudentService {
@@ -40,8 +41,8 @@ public class StudentService {
         return studentRepository.findByAgeBetween(minAge, maxAge);
     }
 
-    public String getFacultyByStudent (Long id) {
-        return studentRepository.findById(id).get().getFaculty().getName();
+    public Faculty getFacultyByStudent (Long id) {
+        return Objects.requireNonNull(studentRepository.findById(id).orElse(null)).getFaculty();
     }
 
 }
