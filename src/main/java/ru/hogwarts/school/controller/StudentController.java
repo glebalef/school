@@ -1,6 +1,7 @@
 package ru.hogwarts.school.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -31,12 +32,22 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
-    public Student deleteBook(@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+    public void deleteBook(@PathVariable Long id) {
+        studentService.deleteStudent(id);
     }
 
-    @GetMapping("age/{age}")
+    @GetMapping("/{age}/age")
     public Collection<Student> getByAge (@PathVariable int age) {
         return studentService.getStudentByAge(age);
+    }
+
+    @GetMapping("/age")
+    public Collection<Student> getByAgeBetween (@RequestParam int minAge, @RequestParam int maxAge) {
+        return studentService.getStudentByAgeBetween(minAge, maxAge);
+    }
+
+    @GetMapping ("/{id}/faculty")
+    public Faculty getFacultyByStudent (@PathVariable Long id) {
+        return studentService.getFacultyByStudent(id);
     }
 }

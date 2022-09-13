@@ -3,44 +3,46 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FacultyService {
 
-    private final HashMap<Long, Faculty> faculties = new HashMap<>();
-    private long lastId = 0;
+    private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(++lastId);
-        faculties.put(lastId, faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty (Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
     public Faculty editFaculty (Faculty faculty) {
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty deleteFaculty (Long id) {
-        return faculties.remove(id);
+    public void deleteFaculty (Long id) {
+        facultyRepository.deleteById(id);
     }
 
-    public ArrayList<Faculty> getFacultyByColor (String color) {
-        ArrayList<Faculty> newList = new ArrayList<>();
-        Faculty[] values = faculties.values().toArray(new Faculty[faculties.size()]);
-        for (int i = 0; i < faculties.values().size(); i++) {
-            if (values[i].getColor().equals(color)) {
-                newList.add(values[i]);
-            }
-        }
-        return newList;
+    public List<Faculty> getFacultyByColor (String color) {
+        return facultyRepository.findByColor(color);
+    }
+
+    public List<Faculty> getFacultyByColorOrName (String colorOrName) {
+        return facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(colorOrName, colorOrName);
+    }
+public Collection<Student> getStudentsByFaculty (Long id) {
+        return Objects.requireNonNull(facultyRepository.findById(id).orElse(null)). getStudent();
     }
 }
