@@ -27,7 +27,10 @@ public class StudentService {
     }
 
     public Student editStudent (Student student) {
+      if (studentRepository.findById(student.getId()).isPresent())
         return studentRepository.save(student);
+      else
+          throw new RuntimeException();
     }
 
     public void deleteStudent (Long id) {

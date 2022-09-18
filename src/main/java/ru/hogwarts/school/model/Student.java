@@ -15,6 +15,10 @@ public class Student {
     @JoinColumn (name = "faculty_id")
     private Faculty faculty;
 
+//    @OneToOne
+//    @JoinColumn (name = "avatar")
+//    private Avatar avatar;
+
     @Override
     public String toString() {
         return "Student{" +

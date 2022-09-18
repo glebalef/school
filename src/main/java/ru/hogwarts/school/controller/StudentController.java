@@ -1,6 +1,9 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
@@ -17,12 +20,12 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public Student getStudentInfo (@PathVariable Long id) {
+    public Student getStudentInfo(@PathVariable Long id) {
         return studentService.findStudent(id);
     }
 
     @PostMapping
-    public Student createStudent (@RequestBody Student student) {
+    public Student createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
@@ -37,17 +40,12 @@ public class StudentController {
     }
 
     @GetMapping("/{age}/age")
-    public Collection<Student> getByAge (@PathVariable int age) {
+    public Collection<Student> getByAge(@PathVariable int age) {
         return studentService.getStudentByAge(age);
     }
 
     @GetMapping("/age")
-    public Collection<Student> getByAgeBetween (@RequestParam int minAge, @RequestParam int maxAge) {
+    public Collection<Student> getByAgeBetween(@RequestParam int minAge, @RequestParam int maxAge) {
         return studentService.getStudentByAgeBetween(minAge, maxAge);
-    }
-
-    @GetMapping ("/{id}/faculty")
-    public Faculty getFacultyByStudent (@PathVariable Long id) {
-        return studentService.getFacultyByStudent(id);
     }
 }
