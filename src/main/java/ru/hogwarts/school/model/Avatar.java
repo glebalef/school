@@ -1,9 +1,18 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Type;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Arrays;
+import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Avatar {
@@ -14,11 +23,24 @@ public class Avatar {
     private long fileSize;
     private String mediaType;
     @Lob
+    @Type(type="org.hibernate.type.BinaryType")
     private byte[] data;
 
 
     @OneToOne
     private Student student;
+
+    public Avatar() {
+    }
+
+    public Avatar(Long id, String filePath, long fileSize, String mediaType, byte[] data, Student student) {
+        this.id = id;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.mediaType = mediaType;
+        this.data = data;
+        this.student = student;
+    }
 
     public Long getId() {
         return id;
@@ -67,4 +89,34 @@ public class Avatar {
     public void setStudent(Student student) {
         this.student = student;
     }
-}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Avatar avatar = (Avatar) o;
+        return fileSize == avatar.fileSize && Objects.equals(id, avatar.id) && Objects.equals(filePath, avatar.filePath) && Objects.equals(mediaType, avatar.mediaType) && Arrays.equals(data, avatar.data) && Objects.equals(student, avatar.student);
+    }
+
+    @Override
+    public String toString() {
+        return "Avatar{" +
+                "id=" + id +
+                ", filePath='" + filePath + '\'' +
+                ", mediaType='" + mediaType + '\'' +
+                ", fileSize=" + fileSize +
+                ", data=" + Arrays.toString(data) +
+                ", student=" + student +
+                '}';
+        }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, filePath, mediaType, fileSize, student);
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
+    }
+    }
+

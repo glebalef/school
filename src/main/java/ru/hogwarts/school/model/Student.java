@@ -19,6 +19,19 @@ public class Student {
 //    @JoinColumn (name = "avatar")
 //    private Avatar avatar;
 
+    public Student() {
+    }
+
+    public Student(Long id, String name, int age, Faculty faculty) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.faculty = faculty;
+    }
+
+    public Student(long id, String name, int age) {
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -36,13 +49,6 @@ public class Student {
     public Faculty getFaculty() {
         return faculty;
     }
-
-    public Student() {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
-
 
     public Long getId() {
         return id;
