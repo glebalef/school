@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
@@ -17,6 +19,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -70,8 +73,14 @@ public class AvatarService {
     public Avatar findAvatar(Long studentId) {
         return avatarRepository.findAvatarByStudentId(studentId).orElse(new Avatar());
     }
-
     private String getExtensions(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
+
+    public List<Avatar> getAllAvatars (Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest= PageRequest.of(pageNumber-1,pageSize);
+        return avatarRepository.findAll(pageRequest).toList();
+    }
 }
+
+

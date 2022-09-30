@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("student")
@@ -43,5 +44,20 @@ public class StudentController {
     @GetMapping("/age")
     public Collection<Student> getByAgeBetween(@RequestParam int minAge, @RequestParam int maxAge) {
         return studentService.getStudentByAgeBetween(minAge, maxAge);
+    }
+
+    @GetMapping ("/number_of_students")
+    public String getNumberOfStudents() {
+        return studentService.getStudentsQuantity();
+    }
+
+    @GetMapping ("/average_age")
+    public Integer getAverageAge() {
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping ("/last5")
+    public List<Student> getLastFive() {
+        return studentService.getLastFive();
     }
 }
