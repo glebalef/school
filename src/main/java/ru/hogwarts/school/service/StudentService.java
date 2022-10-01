@@ -3,44 +3,59 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import ru.hogwarts.school.repositories.StudentRepository;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StudentService {
 
-    private final HashMap<Long, Student> students = new HashMap<>();
-    private long lastId = 0;
+    private final StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student createStudent(Student student) {
-        student.setId(++lastId);
-        students.put(lastId, student);
-        return student;
+         return studentRepository.save(student);
     }
 
     public Student findStudent (Long id) {
-        return students.get(id);
+        return studentRepository.findById(id).orElse(null);
     }
 
     public Student editStudent (Student student) {
-        students.put(student.getId(), student);
-        return student;
+      if (studentRepository.findById(student.getId()).isPresent())
+        return studentRepository.save(student);
+      else
+          throw new RuntimeException();
     }
 
-    public Student deleteStudent (Long id) {
-        return students.remove(id);
+    public void deleteStudent (Long id) {
+       studentRepository.deleteById(id);
+    }
+    public List<Student> getStudentByAge (int age) {
+        return studentRepository.findByAge(age);
     }
 
-    public ArrayList<Student> getStudentByAge (int age) {
-        ArrayList<Student> newList = new ArrayList<>();
-        Student[] values = students.values().toArray(new Student[students.size()]);
-        for (int i = 0; i < students.values().size(); i++) {
-            if (values[i].getAge() == age) {
-                newList.add(values[i]);
-            }
-        }
-        return newList;
+    public List<Student> getStudentByAgeBetween (int minAge, int maxAge) {
+        return studentRepository.findByAgeBetween(minAge, maxAge);
     }
+
+    public Faculty getFacultyByStudent (Long id) {
+        return Objects.requireNonNull(studentRepository.findById(id).orElse(null)).getFaculty();
+    }
+
+    public String getStudentsQuantity (){
+         return studentRepository.getStudentsQuantity();
+    }
+
+    public Integer getAverageAge () {
+        return studentRepository.getAverageAge();
+    }
+
+    public List<Student> getLastFive (){
+        return studentRepository.getLastFive();
+    }
+
 }
