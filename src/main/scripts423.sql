@@ -10,3 +10,4 @@ INNER JOIN avatar ON avatar.student_id = student.id
 
 
 
+
