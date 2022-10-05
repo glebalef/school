@@ -47,7 +47,7 @@ public class StudentController {
     }
 
     @GetMapping ("/number_of_students")
-    public String getNumberOfStudents() {
+    public Integer getNumberOfStudents() {
         return studentService.getStudentsQuantity();
     }
 

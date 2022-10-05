@@ -1,6 +1,8 @@
 package ru.hogwarts.school.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,8 +42,12 @@ public class AvatarService {
         this.avatarRepository = avatarRepository;
     }
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
 
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
+
+        logger.info("avatar is uploaded");
 
         Student student = studentRepository.findById(studentId).orElse(null);
 
@@ -71,6 +77,7 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(Long studentId) {
+        logger.info("avatar for student with id {} is found", studentId);
         return avatarRepository.findAvatarByStudentId(studentId).orElse(new Avatar());
     }
     private String getExtensions(String fileName) {
@@ -78,6 +85,7 @@ public class AvatarService {
     }
 
     public List<Avatar> getAllAvatars (Integer pageNumber, Integer pageSize) {
+        logger.info("list of avatars is presented");
         PageRequest pageRequest= PageRequest.of(pageNumber-1,pageSize);
         return avatarRepository.findAll(pageRequest).toList();
     }
