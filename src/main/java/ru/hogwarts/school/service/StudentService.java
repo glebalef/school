@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -100,5 +103,27 @@ public class StudentService {
             logger.debug("quantity of students is less than 5");
         return studentRepository.getLastFive();
     }
+
+    public Stream<String> getSortedNames () {
+        Stream<Student> studentStream = studentRepository.findAll().stream();
+       Stream <String> namesStream =
+               studentStream
+                .map(e -> e.getName())
+                .sorted()
+                .filter(e -> e.startsWith("A"));
+        return namesStream;
+    }
+
+    public Double getAverageAgeOfStudents () {
+        Stream<Student> studentStream = studentRepository.findAll().stream();
+         return studentStream
+                        .mapToInt(Student::getAge)
+                        .average()
+                        .getAsDouble();
+    }
+
+
+
+
 
 }

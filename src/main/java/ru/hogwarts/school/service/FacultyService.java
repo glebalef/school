@@ -7,10 +7,8 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -69,5 +67,14 @@ public class FacultyService {
 public Collection<Student> getStudentsByFaculty (Long id) {
     logger.info("getStudentsByFaculty");
         return Objects.requireNonNull(facultyRepository.findById(id).orElse(null)). getStudent();
+    }
+
+    public String getLongestName () {
+         return facultyRepository
+                 .findAll()
+                 .stream()
+                 .map (p -> p.getName())
+                 .max(Comparator.comparingInt(String::length))
+                 .get();
     }
 }

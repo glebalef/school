@@ -6,6 +6,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("student")
@@ -59,5 +60,35 @@ public class StudentController {
     @GetMapping ("/last5")
     public List<Student> getLastFive() {
         return studentService.getLastFive();
+    }
+
+    @GetMapping("/names")
+    public Stream<String> getSortedNames() {return studentService.getSortedNames();}
+
+    @GetMapping ("/average_student_age")
+    public Double aveAgeByStream() {return studentService.getAverageAgeOfStudents();}
+
+
+    @GetMapping ("/non_parallel_sum")
+    public Integer getNonParallelHomeWork () {
+        long time  = System.currentTimeMillis();
+        Stream
+                .iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b );
+        time = System.currentTimeMillis() - time;
+        return (int) time;
+    }
+
+    @GetMapping ("/parallel_sum")
+    public Integer getParallelHomeWork () {
+        long time  = System.currentTimeMillis();
+        Stream
+                .iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .parallel()
+                .reduce(0, (a, b) -> a + b );
+        time = System.currentTimeMillis() - time;
+        return (int) time;
     }
 }
