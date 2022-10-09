@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import liquibase.sdk.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.server.DelegatingServerHttpResponse;
@@ -29,7 +30,7 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Student findStudent (Long id) {
+    public Student findStudent(Long id) {
         logger.info("Method find Student is started for id {}", id);
         if (studentRepository.findById(id).isEmpty()) {
             logger.error("Student with id {} is not found", id);
@@ -40,18 +41,18 @@ public class StudentService {
         }
     }
 
-    public Student editStudent (Student student) {
+    public Student editStudent(Student student) {
         logger.info("Method editStudent started for {}", student);
         if (studentRepository.findById(student.getId()).isEmpty()) {
             logger.error("No Student {} in database", student);
             throw new RuntimeException();
         } else
             studentRepository.save(student);
-            logger.info("New student data is {}", student);
+        logger.info("New student data is {}", student);
         return student;
     }
 
-    public void deleteStudent (Long id) {
+    public void deleteStudent(Long id) {
         logger.info("deleteStudent started for id {}", id);
         if (studentRepository.findById(id).isEmpty()) {
             logger.error("Student with id {} is not found", id);
@@ -62,7 +63,7 @@ public class StudentService {
         }
     }
 
-    public List<Student> getStudentByAge (int age) {
+    public List<Student> getStudentByAge(int age) {
         logger.info("getStudent method is executed for age {}", age);
         if (studentRepository.findByAge(age).isEmpty()) {
             logger.error("No students with age {}", age);
@@ -71,59 +72,92 @@ public class StudentService {
         return studentRepository.findByAge(age);
     }
 
-    public Faculty getFacultyByStudent (Long id) {
+    public Faculty getFacultyByStudent(Long id) {
         logger.info("getFacultyByStudent is executed");
         if (studentRepository.findById(id).isEmpty()) {
             logger.info("No student with id {}", id);
-        throw new RuntimeException();
-    } else {
+            throw new RuntimeException();
+        } else {
             logger.info("getFacultyByStudent is executed for id {}", id);
             return Objects.requireNonNull(studentRepository.findById(id).orElse(null)).getFaculty();
         }
     }
 
-    public List<Student> getStudentByAgeBetween (int minAge, int maxAge) {
-        logger.info("showed students with age between {} and {}", minAge,maxAge);
+    public List<Student> getStudentByAgeBetween(int minAge, int maxAge) {
+        logger.info("showed students with age between {} and {}", minAge, maxAge);
         return studentRepository.findByAgeBetween(minAge, maxAge);
     }
 
-    public Integer getStudentsQuantity (){
+    public Integer getStudentsQuantity() {
         logger.info("getStudentsQuantity is executed");
-         return studentRepository.getStudentsQuantity();
+        return studentRepository.getStudentsQuantity();
     }
 
-    public Integer getAverageAge () {
+    public Integer getAverageAge() {
         logger.info("getAverageAge is executed");
         return studentRepository.getAverageAge();
     }
 
-    public List<Student> getLastFive (){
+    public List<Student> getLastFive() {
         logger.info("getLastFive is executed");
         if (studentRepository.getStudentsQuantity() < 5)
             logger.debug("quantity of students is less than 5");
         return studentRepository.getLastFive();
     }
 
-    public Stream<String> getSortedNames () {
+    public Stream<String> getSortedNames() {
         Stream<Student> studentStream = studentRepository.findAll().stream();
-       Stream <String> namesStream =
-               studentStream
-                .map(e -> e.getName())
+        return studentStream
+                .map(Student::getName)
                 .sorted()
                 .filter(e -> e.startsWith("A"));
-        return namesStream;
     }
 
-    public Double getAverageAgeOfStudents () {
+    public Double getAverageAgeOfStudents() {
         Stream<Student> studentStream = studentRepository.findAll().stream();
-         return studentStream
-                        .mapToInt(Student::getAge)
-                        .average()
-                        .getAsDouble();
+        return studentStream
+                .mapToInt(Student::getAge)
+                .average()
+                .getAsDouble();
     }
 
+    Main main = new Main();
+    final Object flag = new Object();
 
 
+    public String allStudentsThreads() {
+        List<Student> students = studentRepository.findAll();
 
+        System.out.println(students.get(0));
+        System.out.println(students.get(1));
 
+        new Thread(() -> {
+            System.out.println(students.get(2));
+            System.out.println(students.get(3));
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(students.get(4));
+            System.out.println(students.get(5));
+        }).start();
+        return "Threads method has been evoked";
+    }
+
+    public String allStudentsThreadsSync() {
+        List<Student> students = studentRepository.findAll();
+        System.out.println(students.get(0));
+        System.out.println(students.get(1));
+
+        synchronized (flag) {
+            System.out.println(students.get(2));
+            System.out.println(students.get(3));
+        }
+
+        synchronized (flag) {
+            System.out.println(students.get(4));
+            System.out.println(students.get(5));
+        } return "Synchronized method has been evoked";
+    }
 }
+
+

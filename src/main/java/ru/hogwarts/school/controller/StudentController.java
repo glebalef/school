@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import liquibase.pro.packaged.S;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
@@ -91,4 +92,12 @@ public class StudentController {
         time = System.currentTimeMillis() - time;
         return (int) time;
     }
+
+    @GetMapping ("/thread")
+    public String getThreadPart1 () {
+        return studentService.allStudentsThreads();}
+
+    @GetMapping ("/synchronized")
+    public String getSynchro () {
+        return studentService.allStudentsThreadsSync();}
 }
