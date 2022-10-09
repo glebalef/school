@@ -121,9 +121,7 @@ public class StudentService {
                 .getAsDouble();
     }
 
-    Main main = new Main();
     final Object flag = new Object();
-
 
     public String allStudentsThreads() {
         List<Student> students = studentRepository.findAll();
@@ -149,15 +147,19 @@ public class StudentService {
         System.out.println(students.get(1));
 
         synchronized (flag) {
-            System.out.println(students.get(2));
-            System.out.println(students.get(3));
+            new Thread(() -> {
+                System.out.println(students.get(2));
+                System.out.println(students.get(3));
+            }).start();
         }
-
         synchronized (flag) {
-            System.out.println(students.get(4));
-            System.out.println(students.get(5));
-        } return "Synchronized method has been evoked";
+            new Thread(() -> {
+                System.out.println(students.get(4));
+                System.out.println(students.get(5));
+            }).start();
+            return "Synchronized method has been evoked";
+        }
     }
-}
+    }
 
 
