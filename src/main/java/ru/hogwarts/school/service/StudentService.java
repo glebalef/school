@@ -19,6 +19,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
+
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
@@ -141,18 +142,17 @@ public class StudentService {
         return "Threads method has been evoked";
     }
 
-    public String allStudentsThreadsSync() {
+    public  synchronized String allStudentsThreadsSync() {
         List<Student> students = studentRepository.findAll();
+
         System.out.println(students.get(0));
         System.out.println(students.get(1));
 
-        synchronized (flag) {
             new Thread(() -> {
                 System.out.println(students.get(2));
                 System.out.println(students.get(3));
             }).start();
-        }
-        synchronized (flag) {
+
             new Thread(() -> {
                 System.out.println(students.get(4));
                 System.out.println(students.get(5));
@@ -160,6 +160,6 @@ public class StudentService {
             return "Synchronized method has been evoked";
         }
     }
-    }
+
 
 
