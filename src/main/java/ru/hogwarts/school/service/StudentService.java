@@ -142,22 +142,28 @@ public class StudentService {
         return "Threads method has been evoked";
     }
 
-    public  synchronized String allStudentsThreadsSync() {
-        List<Student> students = studentRepository.findAll();
+    public static synchronized void printSyncStudents(Student student1, Student student2) {
+        System.out.println(student1);
+        System.out.println(student2);
+    }
 
-        System.out.println(students.get(0));
-        System.out.println(students.get(1));
 
+public String allStudentsThreadsSync ()
+{
+    List<Student> students = studentRepository.findAll();
             new Thread(() -> {
-                System.out.println(students.get(2));
-                System.out.println(students.get(3));
+                printSyncStudents(students.get(0),students.get(1));
             }).start();
 
             new Thread(() -> {
-                System.out.println(students.get(4));
-                System.out.println(students.get(5));
+                printSyncStudents(students.get(2),students.get(3));
             }).start();
-            return "Synchronized method has been evoked";
+
+            new Thread(() -> {
+                printSyncStudents(students.get(4),students.get(5));
+            }).start();
+
+    return " Synchronized method has been evoked";
         }
     }
 
